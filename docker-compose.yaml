@@ -1,8 +1,13 @@
+version: '3.9'
+
 services:
   teslodb:
-    image: mongo:5.0.0
-    container_name: teslo-database
+    image: mongo:4.4.6
+    container_name: proyect-shop
     ports:
       - 27017:27017
-    volumes: 
-      - /mongo:/data/db
+    volumes:
+      - ./mongo:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME= ${USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD= ${PASSWORD}
