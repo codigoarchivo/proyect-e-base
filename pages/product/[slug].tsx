@@ -36,15 +36,25 @@ const ProductPage: NextPage<Props> = ({ product }) => {
     slug: product.slug,
     title: product.title,
     gender: product.gender,
-    quantity: 1,
+    quantity: 5,
   });
 
 
+  const onAddProduct = () => {
+    console.log({ temCartProduct });
+  }
 
   const selectedSize = (size: ISize) => {
     setTempCartProduct(currentProduct => ({
       ...currentProduct,
       size
+    }));
+  }
+
+  const onUpdateQuantity = (quantity: number) => {
+    setTempCartProduct(currentProduct => ({
+      ...currentProduct,
+      quantity
     }));
   }
 
@@ -61,10 +71,10 @@ const ProductPage: NextPage<Props> = ({ product }) => {
             <Typography variant={'subtitle2'}>Cantidad</Typography>
 
             {/* count */}
-            <ItemCounter 
-              currentValue={}
-              updateQuantity={}
-              maxValue=
+            <ItemCounter
+              currentValue={temCartProduct.quantity}
+              updateQuantity={onUpdateQuantity}
+              maxValue={product.inStock > 10 ? 10 : product.inStock}
             />
 
             {/* size */}
@@ -80,7 +90,7 @@ const ProductPage: NextPage<Props> = ({ product }) => {
             (product.inStock > 0)
               ?
               (
-                <Button sx={{ width: '-webkit-fill-available' }} color={'secondary'} className={'circular-btn'}>
+                <Button onClick={onAddProduct} sx={{ width: '-webkit-fill-available' }} color={'secondary'} className={'circular-btn'}>
                   {
                     temCartProduct.size
                       ? 'Agregar al carrito'
