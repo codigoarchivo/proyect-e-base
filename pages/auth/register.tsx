@@ -43,7 +43,7 @@ const RegisterPage = () => {
 
     const [errorMessage, setErrorMessage] = useState('');
 
-    const { replace } = useRouter();
+    const { replace, query } = useRouter();
 
     const { registerUser } = useContext(AuthContext);
 
@@ -61,7 +61,8 @@ const RegisterPage = () => {
             return;
         };
 
-        replace('/');
+        const destination = query.p?.toString() || '/';
+        replace(destination);
     };
 
     return (
@@ -138,7 +139,7 @@ const RegisterPage = () => {
 
                         <Grid item xs={12} display='flex' justifyContent='end'>
                             <NextLink
-                                href={'/auth/login'}
+                                href={query.p ? `/auth/login?p=${query.p?.toString()}` : '/auth/login'}
                                 passHref
                             >
                                 <Link underline='always'>
