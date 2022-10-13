@@ -1,22 +1,43 @@
-import Card from '@mui/material/Card'
+import { useEffect, useContext } from 'react';
 
-import CardContent from '@mui/material/CardContent'
+import { useRouter } from 'next/router';
 
-import Divider from '@mui/material/Divider'
+import Card from '@mui/material/Card';
 
-import Typography from '@mui/material/Typography'
+import CardContent from '@mui/material/CardContent';
 
-import Grid from '@mui/material/Grid'
+import Divider from '@mui/material/Divider';
 
-import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography';
 
-import Button from '@mui/material/Button'
+import Grid from '@mui/material/Grid';
 
-import { ShopLayout } from '../../components/layouts'
+import Stack from '@mui/material/Stack';
 
-import { CardList, OrderSumary } from '../../components/cart'
+import Button from '@mui/material/Button';
+
+import { ShopLayout } from '../../components/layouts';
+
+import { CartContext } from '../../context';
+
+import { CardList, OrderSumary } from '../../components/cart';
 
 const CardPage = () => {
+
+    const { isLoaded, cart } = useContext(CartContext);
+
+    const { replace } = useRouter();
+
+    useEffect(() => {
+        if (isLoaded && cart.length === 0) {
+            replace('/cart/empty');
+        };
+    }, [isLoaded, cart, replace]);
+
+    if (!isLoaded && cart.length !== 0) {
+        return (<></>);
+    };
+
     return (
         <ShopLayout title={'Carrito - 3'} pageDescription={'Carrito de compras de la tienda'}>
             <Typography variant={'h1'} component={'h1'}>
@@ -34,7 +55,12 @@ const CardPage = () => {
                                 <Divider sx={{ my: 1 }} />
 
                                 <OrderSumary />
-                                <Button color='secondary' className='circular-btn' fullWidth>
+                                <Button
+                                    color='secondary'
+                                    className='circular-btn'
+                                    fullWidth
+                                    href='/checkout/address'
+                                >
                                     Checkout
                                 </Button>
                             </Stack>

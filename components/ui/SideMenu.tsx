@@ -29,11 +29,11 @@ import { AuthContext, UiContext } from '../../context';
 
 export const SideMenu = () => {
 
-    const { push } = useRouter();
+    const { push, asPath } = useRouter();
 
     const { isMenuOpen, toggleSideMenu } = useContext(UiContext);
 
-    const { user, isLoggeIn } = useContext(AuthContext);
+    const { user, isLoggeIn, logout } = useContext(AuthContext);
 
     const [searchTerm, setSearchTerm] = useState('');
 
@@ -41,13 +41,13 @@ export const SideMenu = () => {
         if (searchTerm.trim().length === 0) return;
 
         navigaTo(`/search/${searchTerm}`);
-    }
+    };
 
     const navigaTo = (url: string) => {
         toggleSideMenu();
         push(url);
-    }
-
+    };
+    
     return (
         <Drawer
             open={isMenuOpen}
@@ -119,14 +119,14 @@ export const SideMenu = () => {
                     </ListItem>
                     {
                         isLoggeIn ? (
-                            <ListItem button>
+                            <ListItem button onClick={logout}>
                                 <ListItemIcon>
                                     <LoginOutlined />
                                 </ListItemIcon>
                                 <ListItemText primary={'Salir'} />
                             </ListItem>
                         ) : (
-                            <ListItem button>
+                            <ListItem button onClick={() => navigaTo(`/auth/login?p=${asPath}`)}>
                                 <ListItemIcon>
                                     <VpnKeyOutlined />
                                 </ListItemIcon>

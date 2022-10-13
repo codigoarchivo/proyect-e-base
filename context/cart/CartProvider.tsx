@@ -7,6 +7,7 @@ import { CartContext, cartReducer } from './';
 import { ICartProduct } from '../../interfaces';
 
 export interface CartState {
+    isLoaded: boolean;
     cart: ICartProduct[];
     numberOfItems: number;
     subTotal: number;
@@ -19,6 +20,7 @@ interface Props {
 }
 
 const CART_INITIAL_STATE: CartState = {
+    isLoaded: false,
     cart: [],
     numberOfItems: 0,
     subTotal: 0,
@@ -40,8 +42,10 @@ export const CartProvider: FC<Props> = ({ children }) => {
     }, [])
 
     useEffect(() => {
-        Cookie.set('cart', JSON.stringify(state.cart))
-    }, [state.cart])
+        if (state.cart.length !== 0) {
+            Cookie.set('cart', JSON.stringify(state.cart));
+        }
+    }, [state.cart]);
 
     useEffect(() => {
 
