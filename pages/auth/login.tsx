@@ -28,10 +28,6 @@ import { AuthLayout } from "../../components/layouts";
 
 import { validations } from '../../utils';
 
-import { tesloApi } from '../../api';
-
-
-
 type FormData = {
     email: string,
     password: string,
@@ -39,7 +35,7 @@ type FormData = {
 
 const loginPage = () => {
 
-    const { replace } = useRouter();
+    const { replace, query } = useRouter();
 
     const { loginUser } = useContext(AuthContext)
 
@@ -57,7 +53,8 @@ const loginPage = () => {
             return;
         };
 
-        replace('/');
+        const destination = query.p?.toString() || '/';
+        replace(destination);
     };
 
     return (
@@ -117,7 +114,10 @@ const loginPage = () => {
                             </Button>
                         </Grid>
                         <Grid item xs={12} textAlign='end'>
-                            <NextLink href='/auth/register' passHref>
+                            <NextLink
+                                href={query.p ? `/auth/register?p=${query.p?.toString()}` : '/auth/register'}
+                                passHref
+                            >
                                 <Link underline='always'>
                                     ¿No tienes cuenta?
                                 </Link>
