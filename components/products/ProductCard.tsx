@@ -25,8 +25,6 @@ interface Props {
 }
 
 export const ProductCard: FC<Props> = ({ product }) => {
-    // console.log(product);
-    
 
     const [isHovered, setIsHovered] = useState(false);
 
@@ -34,8 +32,8 @@ export const ProductCard: FC<Props> = ({ product }) => {
 
     const productImage = useMemo(() => {
         return isHovered
-            ? `/products/${product.images[1]}`
-            : `/products/${product.images[0]}`
+            ? product.images[1]
+            : product.images[0];
     }
         , [isHovered, product.images])
 
