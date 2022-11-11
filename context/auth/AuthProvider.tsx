@@ -1,5 +1,7 @@
 import { FC, useReducer, ReactNode, useEffect } from 'react';
 
+import { useSession, signOut } from 'next-auth/react';
+
 import axios from 'axios';
 
 import { useRouter } from 'next/router';
@@ -32,25 +34,35 @@ export const AuthProvider: FC<Props> = ({ children }) => {
 
     const { reload } = useRouter();
 
+    const { data, status } = useSession();
+
     useEffect(() => {
-        checkToken();
-    }, []);
 
-    const checkToken = async () => {
-        if (!Cookies.get('token')) return;
+        if (status === 'authenticated') {
+            dispatch({ type: "[Auth] - Login", payload: data?.user as IUser });
+        };
 
-        try {
-            const { data } = await tesloApi.get('/user/validate-token');
+    }, [data, status]);
 
-            const { token, user } = data;
+    // useEffect(() => {
+    //     checkToken();
+    // }, []);
 
-            Cookies.set('token', token);
+    // const checkToken = async () => {
+    //     if (!Cookies.get('token')) return;
 
-            dispatch({ type: "[Auth] - Login", payload: user });
-        } catch (error) {
-            Cookies.remove('token');
-        }
-    };
+    //     try {
+    //         const { data } = await tesloApi.get('/user/validate-token');
+
+    //         const { token, user } = data;
+
+    //         Cookies.set('token', token);
+
+    //         dispatch({ type: "[Auth] - Login", payload: user });
+    //     } catch (error) {
+    //         Cookies.remove('token');
+    //     }
+    // };
 
 
     const loginUser = async (email: string, password: string): Promise<boolean> => {
@@ -100,9 +112,20 @@ export const AuthProvider: FC<Props> = ({ children }) => {
 
 
     const logout = () => {
-        Cookies.remove('token');
         Cookies.remove('cart');
-        reload();
+
+        Cookies.remove('firstName');
+        Cookies.remove('lastName');
+        Cookies.remove('address');
+        Cookies.remove('address2');
+        Cookies.remove('zip');
+        Cookies.remove('city');
+        Cookies.remove('country');
+        Cookies.remove('phone');
+
+        signOut();
+        // reload();
+        // Cookies.remove('token');
     };
 
     return (

@@ -20,6 +20,7 @@ import ConfirmationNumberOutlined from "@mui/icons-material/ConfirmationNumberOu
 import EscalatorWarningOutlined from "@mui/icons-material/EscalatorWarningOutlined"
 import FemaleOutlined from "@mui/icons-material/FemaleOutlined"
 import LoginOutlined from "@mui/icons-material/LoginOutlined"
+import DashBoardOutlined from '@mui/icons-material/DashboardOutlined';
 import MaleOutlined from "@mui/icons-material/MaleOutlined"
 import SearchOutlined from "@mui/icons-material/SearchOutlined"
 import VpnKeyOutlined from "@mui/icons-material/VpnKeyOutlined"
@@ -44,10 +45,10 @@ export const SideMenu = () => {
     };
 
     const navigaTo = (url: string) => {
-        toggleSideMenu();
         push(url);
+        toggleSideMenu();
     };
-    
+
     return (
         <Drawer
             open={isMenuOpen}
@@ -87,7 +88,7 @@ export const SideMenu = () => {
                                     <ListItemText primary={'Perfil'} />
                                 </ListItem>
 
-                                <ListItem button>
+                                <ListItem button onClick={() => navigaTo('/orders/history')}>
                                     <ListItemIcon>
                                         <ConfirmationNumberOutlined />
                                     </ListItemIcon>
@@ -141,20 +142,28 @@ export const SideMenu = () => {
                                 <Divider />
                                 <ListSubheader>Admin Panel</ListSubheader>
 
-                                <ListItem button>
+                                <ListItem button onClick={() => navigaTo(`/admin`)}>
+                                    <ListItemIcon>
+                                        <DashBoardOutlined />
+                                    </ListItemIcon>
+                                    <ListItemText primary={'DashBoard'} />
+                                </ListItem>
+
+                                <ListItem button onClick={() => navigaTo(`/admin/products`)}>
                                     <ListItemIcon>
                                         <CategoryOutlined />
                                     </ListItemIcon>
                                     <ListItemText primary={'Productos'} />
                                 </ListItem>
-                                <ListItem button>
+
+                                <ListItem button onClick={() => navigaTo(`/admin/orders`)}>
                                     <ListItemIcon>
                                         <ConfirmationNumberOutlined />
                                     </ListItemIcon>
                                     <ListItemText primary={'Ordenes'} />
                                 </ListItem>
 
-                                <ListItem button>
+                                <ListItem button onClick={() => navigaTo(`/admin/users`)}>
                                     <ListItemIcon>
                                         <AdminPanelSettings />
                                     </ListItemIcon>
