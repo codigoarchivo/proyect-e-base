@@ -1,5 +1,7 @@
 import { useEffect, useContext } from 'react';
 
+import NextLink from "next/link";
+
 import { useRouter } from 'next/router';
 
 import Card from '@mui/material/Card';
@@ -53,16 +55,21 @@ const CardPage = () => {
                             <Stack spacing={5}>
                                 <Typography variant='h2'>Orden</Typography>
                                 <Divider sx={{ my: 1 }} />
-
-                                <OrderSumary />
-                                <Button
-                                    color='secondary'
-                                    className='circular-btn'
-                                    fullWidth
-                                    href='/checkout/address'
+                                <NextLink
+                                    href={'/checkout/address'}
+                                    as={'/checkout/address'}
+                                    passHref
                                 >
-                                    Checkout
-                                </Button>
+                                    <Button
+                                        color='secondary'
+                                        className='circular-btn'
+                                        fullWidth
+
+                                    >
+                                        Checkout
+                                    </Button>
+                                </NextLink>
+
                             </Stack>
                         </CardContent>
                     </Card>
