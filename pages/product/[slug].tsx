@@ -38,7 +38,7 @@ const ProductPage: NextPage<Props> = ({ product }) => {
 
   const [temCartProduct, setTempCartProduct] = useState<ICartProduct>({
     _id: product._id,
-    images: product.images[0],
+    image: product.images[0],
     price: product.price,
     size: undefined,
     slug: product.slug,
@@ -102,7 +102,11 @@ const ProductPage: NextPage<Props> = ({ product }) => {
             (product.inStock > 0)
               ?
               (
-                <Button onClick={onAddProduct} sx={{ width: '-webkit-fill-available' }} color={'secondary'} className={'circular-btn'}>
+                <Button
+                  onClick={onAddProduct}
+                  sx={{ width: '-webkit-fill-available' }}
+                  color={'secondary'}
+                  className={'circular-btn'}>
                   {
                     temCartProduct.size
                       ? 'Agregar al carrito'
