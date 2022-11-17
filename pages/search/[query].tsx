@@ -57,13 +57,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         }
     }
 
-    let products = await dbProducts.getProductByTerm(query);
+    let products = await dbProducts.getProductsByTerm(query);
 
     const foundProducts = products.length > 0;
 
     if (!foundProducts) {
         // products = await dbProducts.getAllProducts();
-        products = await dbProducts.getProductByTerm('plaid');
+        products = await dbProducts.getProductsByTerm('plaid');
     };
 
     return {
