@@ -1,4 +1,10 @@
+import { useContext, useEffect, useState } from 'react';
+
 import NextLink from 'next/link';
+
+import { useRouter } from 'next/router';
+
+import Cookies from 'js-cookie';
 
 import Card from '@mui/material/Card';
 
@@ -20,9 +26,57 @@ import Button from '@mui/material/Button';
 
 import { ShopLayout } from '../../components/layouts';
 
-import { CardList, OrderSumary } from '../../components/cart';
+import { CardList } from '../../components/cart';
+
+import { CartContext } from '../../context';
+import { Chip } from '@mui/material';
+
+// import { countries } from '../../utils';
 
 const SummaryPage = () => {
+    const { push, replace } = useRouter();
+    const { shippingAddress, numberOfItems, createOrder } = useContext(CartContext);
+
+    const [isPosting, setIsPosting] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
+
+    useEffect(() => {
+        if (!Cookies.get('firstName')) {
+            push('/checkout/address');
+        }
+    }, [push]);
+
+
+    const onCreateOrder = async () => {
+        setIsPosting(true);
+
+        const { hasError, message } = await createOrder();
+
+        if (hasError) {
+            setIsPosting(false);
+            setErrorMessage(message!);
+            return
+        }
+
+        replace(`/orders/${message}`);
+    }
+
+    if (!shippingAddress) {
+        return <></>;
+    }
+
+    const {
+        firstName,
+        lastName,
+        address,
+        address2 = '',
+        zip,
+        city,
+        country,
+        phone,
+    } = shippingAddress;
+
     return (
         <ShopLayout title={'Resumen de Orden'} pageDescription={'Resumen de la Orden'}>
             <Typography variant={'h1'} component={'h1'}>
@@ -36,7 +90,7 @@ const SummaryPage = () => {
                     <Card className={'summary-card '}>
                         <CardContent>
                             <Stack spacing={2}>
-                                <Typography variant='h2'>Resumen (3 prioductos)</Typography>
+                                <Typography variant='h2'>Resumen ({numberOfItems} {numberOfItems === 1 ? 'producto' : 'productos'})</Typography>
 
                                 <Divider sx={{ my: 1 }} />
 
@@ -48,11 +102,12 @@ const SummaryPage = () => {
                                 </Box>
 
                                 <Stack spacing={1}>
-                                    <Typography>Jackson Quintero</Typography>
-                                    <Typography>5565 Algun Lugar</Typography>
-                                    <Typography>Carvajal El Rosal</Typography>
-                                    <Typography>Venezuela</Typography>
-                                    <Typography>+58 6263206326</Typography>
+                                    <Typography>{firstName} {lastName}</Typography>
+                                    <Typography>{address}{address2 ? `, ${address2}` : ''}</Typography>
+                                    <Typography>{city} {zip}</Typography>
+                                    {/* <Typography>{countries.find(c => c.code === country)?.name}</Typography> */}
+                                    <Typography>{country}</Typography>
+                                    <Typography>{phone}</Typography>
                                 </Stack>
 
                                 <Divider sx={{ my: 1 }} />
@@ -64,11 +119,22 @@ const SummaryPage = () => {
                                     </NextLink>
                                 </Box>
 
-                                <OrderSumary />
-
-                                <Button color='secondary' className='circular-btn' fullWidth>
-                                    Confirmar Orden
-                                </Button>
+                                <Box sx={{ mt: 3 }} display='flex' flexDirection={'column'}>
+                                    <Button
+                                        onClick={onCreateOrder}
+                                        color='secondary'
+                                        className='circular-btn'
+                                        fullWidth
+                                        disabled={isPosting}
+                                    >
+                                        Confirmar Orden
+                                    </Button>
+                                    <Chip
+                                        color='error'
+                                        label={errorMessage}
+                                        sx={{ display: errorMessage ? 'flex' : 'none', mt: 2 }}
+                                    />
+                                </Box>
                             </Stack>
                         </CardContent>
                     </Card>
